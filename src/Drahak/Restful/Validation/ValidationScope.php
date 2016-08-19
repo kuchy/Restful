@@ -91,12 +91,18 @@ class ValidationScope extends Object implements IValidationScope
 			$last = count($keys) - 1;
 			foreach ($keys as $index => $key) {
 				$isLast = $index == $last;
+
 				$value = isset($data[$key]) ? $data[$key] : NULL;
+
+				if ($key=='[]' && $isLast){
+					$value = $data;
+				}
+
 				if ($isLast && !isset($value) && !is_array($data) && empty($key)){
 					$value = $data;
 				}
 
-				if (is_array($value)) {
+				if (is_array($value) && !$isLast) {
 					$newPath = Strings::replace($path, "~^$key\.~");
 					$newErrors = $this->validateDeeply($field, $value, $newPath);
 					$errors = array_merge($errors, $newErrors);

@@ -45,7 +45,7 @@ class ValidationException extends LogicException
 	 */
 	public static function createFromRule(Rule $rule, $value = NULL)
 	{
-		return new self($rule->getField(), ($value ? "'" . Strings::truncate($value, 60) .  "' is invalid value: " : '') . vsprintf($rule->getMessage(), $rule->getArgument()), $rule->getCode());
+		return new self($rule->getField(), ($value && !is_array($value)  ? "'" . Strings::truncate($value, 60) .  "' is invalid value: " : '') . vsprintf($rule->getMessage(), $rule->getArgument()), $rule->getCode());
 	}
 
 }
